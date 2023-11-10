@@ -3,42 +3,56 @@ install.packages("tidyr")
 install.packages('hash')
 install.packages('dplyr')
 install.packages('psych')
+
 #Importing Libraries
 library(hash)
 library(tidyr)
 library(dplyr)
 library(psych)
+
 #Code start
+
 set.seed(0)
 #getting working directory and the go to session->set working directory- >choose directory getwd()
+
 #dataset1
 #importing a csv file for dataset1
 data1 <- read.csv(file="food_order.csv", header=TRUE,sep=",") #removing duplicates from data1
 data1 <- data1[!duplicated(data1), ]
+
 #Removing NA before plotting boxplot
 data1 <- data1 %>% drop_na()
+
 #Box plot after removing outliers
 boxplot(data1$cost_of_the_order)
+
 #Removing the outliers
 Q1 <- quantile(data1$cost_of_the_order, .25)
 Q3 <- quantile(data1$cost_of_the_order, .75)
 IQR <- IQR(data1$cost_of_the_order)
 new_data2 <- subset(data1, data1$cost_of_the_order> (Q1 - 1.5*IQR) & data1$cost_of_the_order< (Q3 + 1.5*IQR))
 new_data2
+
 #There are no outliers in this dataset
+
 #taking subset of data1
 data1_subset <- subset(data1, rating!="Not given"& cuisine_type %in%c('Indian','American','Chinese') )
 data1_subset
+
 #accessing required data from data1
 new_data1 <- data_subset[c("restaurant_name","cuisine_type","cost_of_the_order","rating","d ay_of_the_week","customer_id")]
 #assigning sequence to rownames after removing the unnecessary rows rownames new_data1 <- 1:nrow(new_data1)
+
 #removing null values if any
 new_data1 <- drop_na(new_data1)
-17
+
 View(new_data1)
+
 #to export the files into csv format
 write.csv(new_data1,file="data1.csv")
+
 #Analysis of dataset1
+
 #Reading the csv
 data1 <- read.csv(file="data1.csv", header=TRUE,sep=",")
 #Getting over all size of data1 num_of_rows_data1 <- nrow(data1)
