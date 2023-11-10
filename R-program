@@ -63,6 +63,7 @@ l2 <- aggregate(x= data1$cost_of_the_order,by = list(data1$cuisine_type), FUN = 
 l2
 l3 <- aggregate(x= data1$cost_of_the_order,by = list(data1$rating), FUN = length)
 l3
+
 #summary
 full_sum_data1 <- summary(data1)
 full_sum_data1
@@ -74,6 +75,7 @@ sum_data3
 sum_data3
 <- tapply(data1$cost_of_the_order, data1$day_of_the_week, summary) <- tapply(data1$cost_of_the_order, data1$cuisine_type, summary)
 <- tapply(data1$cost_of_the_order, data1$rating, summary)
+
 #sd
 sddata1 <- sd(data1$cost_of_the_order)
 gsd1 <- aggregate(x= data1$cost_of_the_order,by = list(data1$day_of_the_week), FUN = sd)
@@ -82,15 +84,15 @@ gsd2 <- aggregate(x= data1$cost_of_the_order,by = list(data1$cuisine_type), FUN 
 gsd2
 gsd3 <- aggregate(x= data1$cost_of_the_order,by = list(data1$rating), FUN = sd)
 gsd3
+
 #Variance
 var_overall = var(data1$cost_of_the_order)
 v1 <- aggregate(x= data1$cost_of_the_order,by = list(data1$day_of_the_week), FUN = var)
 v1
 v2 <- aggregate(x= data1$cost_of_the_order,by = list(data1$rating), FUN = var) v2
 v3 <- aggregate(x= data1$cost_of_the_order,by = list(data1$cuisine_type), FUN = var)
-18
-
 v3
+
 #Exponential mean
 expmean <- exp(mean(log(data1$cost_of_the_order))) expmean
 #exponential mean for day_of_the_week by creating a function exp_day_of_the_week <- function() {
@@ -120,6 +122,7 @@ h[i]<-a
 }
 return(h) }
 exp_cuisine_type()
+
 #geometric mean
 library(psych)
 geomean <- geometric.mean(data1$cost_of_the_order) geomean
@@ -129,8 +132,6 @@ geo_day_of_the_week <- function() {
 for (i in uniqval){
 data_day_week <- data1$cost_of_the_order[data1$day_of_the_week==i] a <- geometric.mean(data_day_week)
 h[i]<-a
-19
-
 } return(h)
 }
 geo_day_of_the_week()
@@ -154,6 +155,7 @@ h[i]<-a
 return(h)
 }
 geo_cuisine_type()
+
 #Mode
 getmode <- function(v) {
  uniqv <- unique(v)
@@ -173,8 +175,6 @@ mod_day_of_the_week <- function() {
  h <- hash()
 for (i in uniqval){
 data_day_week <- data1$cost_of_the_order[data1$day_of_the_week==i] uniqv <- unique(data_day_week)
-20
-
 return(h) }
 a <- uniqv[which.max(tabulate(match(data_day_week, uniqv)))] h[i]<-a
 }
@@ -189,34 +189,42 @@ a <- uniqv[which.max(tabulate(match(data_cuisine_type, uniqv)))] h[i]<-a
 return(h) }
 mod_cuisine_type()
 #Other Descriptive Statistics describe(data1$cost_of_the_order) describeBy(data1$cost_of_the_order,data1$day_of_the_week) describeBy(data1$cost_of_the_order,data1$rating) describeBy(data1$cost_of_the_order,data1$cuisine_type)
+
 #Plot the chart
 boxplot(data1$cost_of_the_order)
 #histogram dataset1
 hist(data1$cost_of_the_order,xlab = "Cost of Order",col = "lightblue",border = "black", xlim = c(0,40), breaks = 5,main='Histogram of Cost of Order')
+
 ##########importing a csv file for dataset2
 data2 <- read.csv(file="weather_events_ds2.csv", header=TRUE, sep=",") #remove duplicates from data2
 #data2 <- data2[!duplicated(data2), ]
+
 #Changing the format of Start Time Column
 data2[['StartTime.UTC.']] <- strptime(data2[['StartTime.UTC.']],format = "%Y- %m-%d %H:%M:%S")
 data2[['StartTime.Date']] <- format(data2[['StartTime.UTC.']],"%Y-%m-%d") data2[['StartTime.Time']] <- format(data2[['StartTime.UTC.']],"%H:%M:%S")
+
 #Sorting dataset 2 based on the datetime
 data2 <- data2 %>% arrange(data2$StartTime.UTC.)
 View(data2)
+
 #Getting the Inter arrival Time
 data2 <- data2 %>% mutate(time_diff_col = strptime(data2$StartTime.UTC., "%Y- %m-%d %H:%M:%S") - lag(strptime(data2$StartTime.UTC., "%Y-%m-%d %H:%M:%S"))) View(data2)
-#converting Inter arrival time to numeric to do the data analysis data2$time_diff_col <- as.numeric(data2$time_diff_col)
-21
 
+#converting Inter arrival time to numeric to do the data analysis data2$time_diff_col <- as.numeric(data2$time_diff_col)
 View(data2)
+
 #Removing NA before plotting boxplot
 data2 <- data2 %>% drop_na()
+
 #Box plot after removing outliers
 boxplot(data2$time_diff_col)
+
 #Removing the outliers
 Q1 <- quantile(data2$time_diff_col, .25)
 Q3 <- quantile(data2$time_diff_col, .75)
 IQR <- IQR(data2$time_diff_col)
 new_data2 <- subset(data2, data2$time_diff_col> (Q1 - 1.5*IQR) & data2$time_diff_col< (Q3 + 1.5*IQR))
+
 #Original df = 7419060 after removing outliers = 7163571
 #taking subset of data2
 data2_subset <- subset(new_data2,format.Date(new_data2[['StartTime.Date']], "%m")=="12" &
@@ -225,26 +233,33 @@ Type %in% c('Rain','Snow') &
 Severity %in% c('Light','Heavy') &
 City %in% c('New Cumberland','New York','North Clarendon','North Dansville', 'North Kingstown','North Las Vegas','North Little Rock'))
 View(data2_subset)
+
 #accessing required data from data2
 new_data2 <- data2_subset[c("StartTime.UTC.","Severity","Type")]
+
 #Dropping null values
 new_data2 <- drop_na(new_data2)
+
 #assigning sequence to rownames after removing the unnecessary rows rownames(new_data2) <- 1:nrow(new_data2)
 View(new_data2)
+
 #to export the files into csv format
 write.csv(new_data2,file="data2.csv")
+
 #Reading the csv file
 data2 <- read.csv(file="data2.csv", header=TRUE,sep=",")
+
 #Getting the Inter arrival Time
 data2 <- data2 %>% mutate(time_diff_col = strptime(data2$StartTime.UTC., "%Y- %m-%d %H:%M:%S") - lag(strptime(data2$StartTime.UTC., "%Y-%m-%d %H:%M:%S")))
 View(data2)
 #converting Inter arrival time to numeric to do the data analysis data2$time_diff_col <- as.numeric(data2$time_diff_col) View(data2)
+
 #Removing null value
 data2 <- data2 %>% drop_na()
-#Plot the chart.
-22
 
+#Plot the chart.
 boxplot(data2$time_diff_col)
+
 #data without the outliers new_data2_wo = 221, therefore 22 outliers are there in this dataset
 Q1 <- quantile(data2$time_diff_col, .25)
 Q3 <- quantile(data2$time_diff_col, .75)
@@ -253,11 +268,13 @@ new_data2_wo <- subset(data2, data2$time_diff_col> (Q1 - 1.5*IQR) & data2$time_d
 (Q3 + 1.5*IQR))
 new_data2_wo
 #new_data2_wo has 213 data, therefore outliers = 22
+
 #Summary
 full_sum_data2 <- summary(data2)
 full_sum_data2
 sum_data2_severity <- tapply(data2$time_diff_col, data2$Severity, summary) sum_data2_severity
 sum_data2_type <- tapply(data2$time_diff_col, data2$Type, summary) sum_data2_type
+
 #SD
 sddata1 <- sd(data2$time_diff_col)
 sddata1
@@ -265,6 +282,7 @@ sd_sev <- aggregate(x= data2$time_diff_col,by = list(data2$Severity), FUN = sd)
 sd_sev
 sd_type <- aggregate(x= na.omit(data2$time_diff_col),by = list(data2$Type), FUN = sd)
 sd_type
+
 #Variance
 var_overall = var(data2$time_diff_col)
 var_overall
@@ -272,6 +290,7 @@ var_sev <- aggregate(x= data2$time_diff_col,by = list(data2$Severity), FUN = var
 var_sev var_typ <- aggregate(x= data2$time_diff_col,by = list(data2$Type), FUN = var)
 var_typ
 #Other Descriptive Statistics describe(data2$time_diff_col) describeBy(data2$time_diff_col,data2$Severity) describeBy(data2$time_diff_col,data2$Type)
+
 #Exponential Mean
 expmean_d2 <- exp(mean(log(data2$time_diff_col)))
 expmean_d2
@@ -281,8 +300,6 @@ expmean_d2
      for (i in uniqval){
            d <- data2$time_diff_col[data2$Severity==i]
            a <- exp(mean(log(d)))
-23
-
 h[i]<-a
 } return(h)
 }
@@ -297,6 +314,7 @@ exp_d2_type<- function() {
            }
 return(h) }
 exp_d2_type()
+
 #Geometric Mean
 geomeand2 <- geometric. mean(data2$time_diff_col) geomeand2
 geo_sev <- function() {
@@ -319,6 +337,7 @@ geo_ty <- function() {
            }
 return(h)
 } geo_ty()
+
 #Mode
 getmoded2 <- function(v) {
 uniqv <- unique(v)uniqv[which.max(tabulate(match(v, uniqv)))] }
@@ -328,8 +347,6 @@ mod_d2_sev <- function() {
  uniqval <- unique(data2$Severity)
  h <- hash()
  for (i in uniqval){
-24
-
 d <- data2$time_diff_col[data2$Severity==i] uniqv <- unique(d)
 a <- uniqv[which.max(tabulate(match(d, uniqv)))] h[i]<-a
 }
@@ -344,10 +361,11 @@ uniqv <- unique(d)
 a <- uniqv[which.max(tabulate(match(d, uniqv)))] h[i]<-a
 } return(h) }
 mod_d2_type()
+
 #histogram
 hist(data2$timediff_col,xlab = "Inter Arrival Time in seconds",col = "lightblue",border = "black", breaks = 10,main='Histogram of Inter Arrival Time')
-#REPORT PART 2 CODE
-############ Goodness of Fit
+
+#### Goodness of Fit ####
 # For Dataset1
 data1 <- read.csv(file="data1.csv", header=TRUE,sep=",")
 a <- min(data1$cost_of_the_order)
@@ -362,10 +380,7 @@ class_probabilities <- append(class_probabilities,pnorm(4,mean = 16.65, sd= 7.3)
 class_probabilities <- append(class_probabilities,pnorm(9,mean = 16.65, sd= 7.3)-pnorm(4,mean = 16.65, sd= 7.3))
 class_probabilities <- append(class_probabilities,pnorm(14,mean = 16.65, sd= 7.3)-pnorm(9,mean = 16.65, sd= 7.3))
 class_probabilities <- append(class_probabilities,pnorm(19,mean = 16.65, sd= 7.3)-pnorm(14,mean = 16.65, sd= 7.3))
-class_probabilities <- append(class_probabilities,pnorm(24,mean = 16.65, sd=
-25
-
-7.3)-pnorm(19,mean = 16.65, sd= 7.3))
+class_probabilities <- append(class_probabilities,pnorm(24,mean = 16.65, sd=7.3)-pnorm(19,mean = 16.65, sd= 7.3))
 class_probabilities <- append(class_probabilities,pnorm(29,mean = 16.65, sd= 7.3)-pnorm(24,mean = 16.65, sd= 7.3))
 class_probabilities <- append(class_probabilities,1 -pnorm(29,mean = 16.65, sd= 7.3)) sum(unlist(class_probabilities))
 exp_val <- lapply(class_probabilities, function(n) n * 551) chi_fun <- function(cout,exp_val){
@@ -381,8 +396,10 @@ exp_val <- lapply(class_probabilities, function(n) n * 551) chi_fun <- function(
 return (blist)
 }
 chi_fun_list <- chi_fun(cout,exp_val)
+
 #For chi-square with alpha = 0.05
 v <- qchisq(.95, 6)
+
 #For dataset2
 data2 <- read.csv(file="data2.csv", header=TRUE,sep=",") #Getting the Inter arrival Time
 data2 <- data2 %>% mutate(time_diff_col = strptime(data2$StartTime.UTC., "%Y- %m-%d %H:%M:%S") - lag(strptime(data2$StartTime.UTC., "%Y-%m-%d %H:%M:%S"))) View(data2)
@@ -398,10 +415,7 @@ class_probabilities <- append(class_probabilities,pexp(20000,rate = 1/11334)) cl
 class_probabilities <- append(class_probabilities,pexp(60000,rate = 1/11334)- pexp(40000,rate = 1/11334))
 class_probabilities <- append(class_probabilities,pexp(80000,rate = 1/11334)- pexp(60000,rate = 1/11334))
 class_probabilities <- append(class_probabilities,pexp(100000,rate = 1/11334)- pexp(80000,rate = 1/11334))
-class_probabilities <- append(class_probabilities,pexp(120000,rate = 1/11334)-
-26
-
-pexp(100000,rate = 1/11334))
+class_probabilities <- append(class_probabilities,pexp(120000,rate = 1/11334)-pexp(100000,rate = 1/11334))
 class_probabilities <- append(class_probabilities,pexp(140000,rate = 1/11334)- pexp(120000,rate = 1/11334))
 class_probabilities <- append(class_probabilities,pexp(160000,rate = 1/11334)- pexp(140000,rate = 1/11334))
 class_probabilities <- append(class_probabilities,pexp(180000,rate = 1/11334)- pexp(160000,rate = 1/11334))
@@ -423,9 +437,12 @@ chi_fun <- function(frequency,exp_val){
  return (blist)
 }
 chi_fun_list <- chi_fun(frequency,exp_val)
+
 #For chi-square with alpha = 0.05
 v <- qchisq(.95, 4)
+
 ### Hypothesis Testing###
+
 result <- t.test(data1$cost_of_the_order~day_of_the_week,data = data1) p_value <- result$p.value
 l <-length(data2$time_diff_col)-1
 v <- pchisq(0.05, 6, lower.tail = FALSE)
@@ -435,4 +452,4 @@ result2 <- anova(reduced_model,full_model)
 result2
 p_value2 <- result2["Pr(>F)"]
 p_value2
-27
+
