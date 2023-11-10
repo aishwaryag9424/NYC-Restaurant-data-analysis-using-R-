@@ -13,6 +13,6 @@ https://www.kaggle.com/code/ahsan81/nyc-restaurant-food-order-delivery-detailed-
 
 # Statistical features:
 
-Normal Distribution: The normal distribution, also known as the Gaussian distribution or bell curve, is a continuous probability distribution that is symmetric around its mean, denoted by μ (mu). The shape of the normal distribution is characterized by the probability density function (PDF).<br />
+Normal Distribution: The normal distribution, also known as the Gaussian distribution or bell curve, is a continuous probability distribution that is symmetric around its mean, denoted by μ (mu). The shape of the normal distribution is characterized by the probability density function (PDF).\
 
 Exponential Distribution: The exponential distribution is a continuous probability distribution that describes the time between events in a Poisson process, where events occur continuously and independently at a constant average rate. 
