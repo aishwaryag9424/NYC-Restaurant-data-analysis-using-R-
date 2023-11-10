@@ -23,6 +23,6 @@ Types:
 2. Paired Samples T-Test: Compares the means of two related groups (e.g., repeated measures on the same individuals).
 
 **F-Test:** The F-test is used for comparing variances or testing the equality of means among more than two groups.\
-Types:\
-One-Way ANOVA (Analysis of Variance): Tests if there are any statistically significant differences between the means of three or more independent groups.\
-Two-Way ANOVA: Extends the one-way ANOVA to two independent variables.
+Types:
+1. One-Way ANOVA (Analysis of Variance): Tests if there are any statistically significant differences between the means of three or more independent groups.
+2. Two-Way ANOVA: Extends the one-way ANOVA to two independent variables.
